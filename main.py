@@ -1,11 +1,11 @@
-from utils.summarizer import summarize_data, eda_, clarifier, eda_and_summarize
+from utils.smart_analyzer import summarize_data, eda_, clarifier, eda_and_summarize
 from utils.data_loader import data_load
 from utils.analyzer import analyze_dataset
 import pandas as pd
 
 def main():
     # Load dataset
-    df = pd.read_csv(r'D:\EDRIVE\auto_summarizer\data\nearest-earth-objects(1910-2024).csv')
+    df = pd.read_csv(r'D:\EDRIVE\My projects\auto_summarizer\data\nearest-earth-objects(1910-2024).csv')
     
     chathistory = {}
     query_id = 0

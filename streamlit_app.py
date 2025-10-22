@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
-from utils.summarizer import summarize_data, eda_, eda_and_summarize, clarifier
-from utils.analyzer import numerical_analysis, categorical_analysis
+import plotly.express as px
+import plotly.graph_objects as go
+from utils.smart_analyzer import SmartAnalyzer
 
 st.set_page_config(page_title="Dive in Data", page_icon="📊", layout="wide")
 
@@ -10,31 +11,41 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 if "df" not in st.session_state:
     st.session_state.df = None
-if "chathistory" not in st.session_state:
-    st.session_state.chathistory = {}
+if "analyzer" not in st.session_state:
+    st.session_state.analyzer = None
+if "conversation_context" not in st.session_state:
+    st.session_state.conversation_context = []
 
-# Sidebar for file upload
+# Sidebar
 with st.sidebar:
-    st.title(" Dive in Data")
-    st.markdown("### Auto Summarizer App")
+    st.title("📊 Dive in Data")
+    st.markdown("### Smart Data Analysis Chat")
     st.markdown("---")
     
     uploaded_file = st.file_uploader("Upload your CSV file", type=['csv'])
     
     if uploaded_file is not None:
         st.session_state.df = pd.read_csv(uploaded_file)
-        st.success(f" Loaded {len(st.session_state.df)} rows")
+        st.session_state.analyzer = SmartAnalyzer(st.session_state.df)
+        st.success(f"✅ Loaded {len(st.session_state.df)} rows")
         st.markdown(f"**Columns:** {len(st.session_state.df.columns)}")
+        
+        with st.expander("📋 Column Names"):
+            for col in st.session_state.df.columns:
+                st.text(f"• {col}")
     
     st.markdown("---")
     st.markdown("### 💡 Try asking:")
-    st.markdown("- Summarize this data")
-    st.markdown("- Show me EDA")
-    st.markdown("- EDA and summarize")
+    st.markdown("- What's in this data?")
+    st.markdown("- Show trends in sales over time")
+    st.markdown("- Compare prices by category")
+    st.markdown("- Plot age vs salary")
+    st.markdown("- What's the average revenue?")
+    st.markdown("- Show me missing values")
     
-    if st.button("Clear Chat"):
+    if st.button("🗑️ Clear Chat"):
         st.session_state.messages = []
-        st.session_state.chathistory = {}
+        st.session_state.conversation_context = []
         st.rerun()
 
 # Main chat interface
@@ -43,7 +54,12 @@ st.title("💬 Chat with your Data")
 # Display chat messages
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+        if message["role"] == "assistant":
+            st.markdown(message["content"])
+            if "chart" in message and message["chart"]:
+                st.plotly_chart(message["chart"], use_container_width=True)
+        else:
+            st.markdown(message["content"])
 
 # Chat input
 if prompt := st.chat_input("Ask me anything about your data..."):
@@ -57,42 +73,41 @@ if prompt := st.chat_input("Ask me anything about your data..."):
         
         # Generate response
         with st.chat_message("assistant"):
-            with st.spinner("Analyzing..."):
+            with st.spinner("Thinking..."):
                 try:
-                    # Prepare data
-                    sample_data = st.session_state.df.sample(min(50, len(st.session_state.df)))
-                    df_string = sample_data.to_csv(index=False)
+                    # Get smart response with chart
+                    result = st.session_state.analyzer.process_query(
+                        prompt, 
+                        st.session_state.conversation_context
+                    )
                     
-                    # Analyze dataset
-                    eda_answers = {
-                        'categorical_summary': categorical_analysis(st.session_state.df),
-                        'numerical_summary': numerical_analysis(st.session_state.df)
-                    }
+                    # Display text response
+                    st.markdown(result['response'])
                     
-                    # Clarify user intent
-                    res = clarifier(prompt.lower(), st.session_state.chathistory)
+                    # Display chart if generated
+                    chart = None
+                    if result['chart']:
+                        st.plotly_chart(result['chart'], use_container_width=True)
+                        chart = result['chart']
                     
-                    summarizer_prompt = f'{prompt}+{df_string}'
+                    # Save to messages
+                    st.session_state.messages.append({
+                        "role": "assistant", 
+                        "content": result['response'],
+                        "chart": chart
+                    })
                     
-                    # Route to appropriate function
-                    if 'eda and summarize' in res.text.lower():
-                        response = eda_and_summarize(summarizer_prompt, eda_answers)
-                        answer = response.text
-                    elif 'only eda' in res.text.lower():
-                        response = eda_(summarizer_prompt, eda_answers)
-                        answer = response.text
-                    elif 'only summarize' in res.text.lower():
-                        response = summarize_data(summarizer_prompt)
-                        answer = response.text
-                    else:
-                        # Default to EDA and summarize
-                        response = eda_and_summarize(summarizer_prompt, eda_answers)
-                        answer = response.text
+                    # Update context
+                    st.session_state.conversation_context.append({
+                        "user": prompt,
+                        "assistant": result['response'][:300]
+                    })
                     
-                    st.markdown(answer)
-                    st.session_state.messages.append({"role": "assistant", "content": answer})
+                    # Keep only last 3 exchanges in context
+                    if len(st.session_state.conversation_context) > 3:
+                        st.session_state.conversation_context.pop(0)
                     
                 except Exception as e:
                     error_msg = f"❌ Error: {str(e)}"
                     st.error(error_msg)
-                    st.session_state.messages.append({"role": "assistant", "content": error_msg})
+                    st.session_state.messages.append({"role": "assistant", "content": error_msg, "chart": None})

@@ -1,5 +1,5 @@
 import pandas as pd
-df = pd.read_csv(r'D:\EDRIVE\auto_summarizer\data\nearest-earth-objects(1910-2024).csv')
+df = pd.read_csv(r'D:\EDRIVE\My projects\auto_summarizer\data\nearest-earth-objects(1910-2024).csv')
 def numerical_analysis(df):
     numerical_summary = {}
     numeric_col = df.select_dtypes(include='number').columns.tolist()
