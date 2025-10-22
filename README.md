@@ -1,159 +1,110 @@
-Dive in Data - Smart Data Analysis Chat
-An intelligent data analysis tool that lets you chat with your CSV data using natural language. Ask questions, get insights, and generate visualizations automatically.
+Dive in Data — Smart Data Analysis Chat
 
-Features
-Natural Language Queries
-Ask questions in plain English and get intelligent responses. No need to know SQL or complex syntax.
+Dive in Data is an intelligent chat-based data analysis tool that lets you explore CSV files through natural language.
+You can upload a dataset, ask questions, and instantly receive analytical insights and visualizations — without writing a single line of code.
 
-Automatic Visualization
-The system automatically generates appropriate charts based on your query - line charts for trends, bar charts for comparisons, scatter plots for correlations, and more.
+🔹 Features
 
-Conversational Memory
-Remembers the context of your conversation, so you can build on previous questions naturally.
+Natural Language Queries — Ask questions in plain English and get meaningful data insights.
 
-Smart Column Detection
-Finds the right columns even if you don't use exact names. Ask about "sales" and it'll match "total_sales" or "sales_amount".
+Automatic Visualization — Generates the most suitable charts (line, bar, scatter, pie, etc.) based on your query.
 
-Varied Responses
-Every answer is unique and conversational. The system adapts its responses to avoid repetitive patterns.
+Conversational Memory — Remembers context across multiple questions for smoother, natural conversations.
 
-Quick Start
-Prerequisites
+Smart Column Detection — Detects related columns even if names don’t match exactly (e.g., “sales” → “total_sales”).
+
+Interactive Results — Displays charts and summaries you can explore directly in the browser.
+
+🔹 Quick Start
+1. Prerequisites
+
 Python 3.8 or higher
-Google Gemini API key
-Installation
-Step 1: Clone the repository
 
-bash
+Google Gemini API key
+
+2. Installation
 git clone https://github.com/yourusername/dive-in-data.git
 cd dive-in-data
-Step 2: Install dependencies
-
-bash
 pip install -r requirements.txt
-Step 3: Set up your API key
 
-Create a .env file in the root directory:
+3. Set up your API key
+
+Create a .env file in the project root and add your key:
 
 API_KEY=your_gemini_api_key_here
+
+
 You can get your API key from Google AI Studio
+.
 
-Step 4: Run the application
-
-bash
+4. Run the App
 streamlit run streamlit_app.py
-The app will open in your default browser at http://localhost:8501
 
-Usage
-Upload Your Data
-Use the sidebar to upload any CSV file. The system will automatically analyze its structure and prepare it for queries.
+
+The app will open automatically at http://localhost:8501
+
+🔹 How to Use
+
+Upload Your Dataset
+Use the sidebar to upload any CSV file.
 
 Ask Questions
-Here are some example queries you can try:
+Type your queries like:
 
-General Understanding
+“Summarize this dataset.”
 
-"What's in this dataset?"
-"Give me a summary of the data"
-"Show me the column names"
-Statistical Analysis
+“Show missing values.”
 
-"What's the average revenue?"
-"Show me missing values"
-"What's the range of prices?"
-Comparisons
+“Plot sales by region.”
 
-"Compare sales by region"
-"Which category has the highest revenue?"
-"Show top 5 products by sales"
-Trends and Patterns
+“Compare revenue across categories.”
 
-"Show sales trends over time"
-"Plot monthly revenue"
-"Display customer growth"
-Correlations
-
-"Plot age vs income"
-"Is there a relationship between price and quantity?"
-"Show correlation between variables"
 View Results
-The system provides both textual insights and visual charts. Charts are interactive - you can zoom, pan, and hover for details.
+Get both text-based explanations and interactive charts generated automatically.
 
-Project Structure
+🔹 Project Structure
 dive-in-data/
 │
-├── streamlit_app.py          # Main application interface
+├── streamlit_app.py          # Main web interface
 ├── utils/
-│   ├── smart_analyzer.py     # Core intelligence and query processing
-│   ├── analyzer.py            # Statistical analysis functions
-│   └── summarizer.py          # Data summarization utilities
+│   ├── smart_analyzer.py     # Query understanding and visualization logic
+│   ├── analyzer.py           # Core statistical functions
+│   └── data_loader.py         # Data summarization utilities
 │
-├── requirements.txt           # Python dependencies
-├── .env                       # API key configuration
-└── README.md                  # This file
-How It Works
-Step 1: Query Understanding
-When you ask a question, the system analyzes your intent and determines what kind of analysis or visualization you need.
+├── requirements.txt          # Dependencies
+├── .env                      # API configuration
+└── README.md                 # Documentation
 
-Step 2: Column Matching
-It intelligently matches your query to actual column names in your dataset, even with approximate or partial matches.
+🔹 Technologies Used
 
-Step 3: Analysis and Visualization
-Based on the intent, it performs the appropriate analysis and generates relevant charts automatically.
+Streamlit — Web application interface
 
-Step 4: Response Generation
-The system creates a natural, conversational response that explains the findings in clear language.
+Pandas — Data analysis and manipulation
 
-Technical Details
-Built With
+Plotly — Interactive visualizations
 
-Streamlit - Web interface
-Pandas - Data manipulation
-Plotly - Interactive visualizations
-Google Gemini - Natural language understanding
-Python-dotenv - Environment configuration
-Chart Types Supported
+Google Gemini API — Natural language query processing
 
-Line charts for time series and trends
-Bar charts for categorical comparisons
-Scatter plots for correlations
-Pie charts for distributions
-Histograms for frequency distributions
-Box plots for outlier detection
-Configuration
-You can modify the system behavior by adjusting parameters in smart_analyzer.py:
+Python-dotenv — Secure API key handling
 
-temperature - Controls response creativity (0.3-1.0)
-max_output_tokens - Maximum response length
-Context window size - Number of previous conversations to remember
-Troubleshooting
-Issue: "API key not found"
-Make sure you've created a .env file with your API key in the root directory.
+🔹 Common Issues
 
-Issue: Charts not displaying
-Check that your dataset has the appropriate column types (numeric columns for numerical charts, etc.)
+“API key not found” → Ensure .env file exists with the correct key.
 
-Issue: Column not found
-Try using more specific column names or check the actual column names in the sidebar.
+Charts not showing → Verify your dataset has valid numeric or categorical columns.
 
-Contributing
-Contributions are welcome! Feel free to:
+Column not recognized → Try referring to the exact or closely matching column name.
 
-Report bugs
-Suggest new features
-Submit pull requests
-Improve documentation
-Please ensure your code follows the existing style and includes appropriate comments.
+🔹 Future Improvements
 
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
+Better query understanding and natural reasoning
 
-Acknowledgments
-Google Gemini for natural language processing
-Streamlit for the web framework
-Plotly for interactive visualizations
-Contact
-For questions or feedback, please open an issue on GitHub.
+Support for multiple datasets in one session
 
-Note: This tool requires an active internet connection and a valid Google Gemini API key to function.
+Enhanced visualization customization
 
+Option to export results and summaries
+
+🔹 License
+
+This project is licensed under the MIT License — see the LICENSE file for details.
