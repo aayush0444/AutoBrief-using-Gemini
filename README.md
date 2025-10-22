@@ -23,7 +23,7 @@ Python 3.8 or higher
 Google Gemini API key
 
 2. Installation
-git clone https://github.com/yourusername/dive-in-data.git
+git clone (https://github.com/aayush0444/AutoBrief-using-Gemini.git)
 cd dive-in-data
 pip install -r requirements.txt
 
@@ -41,7 +41,7 @@ You can get your API key from Google AI Studio
 streamlit run streamlit_app.py
 
 
-The app will open automatically at http://localhost:8501
+The app will soon be deployed to streamlit
 
 🔹 How to Use
 
